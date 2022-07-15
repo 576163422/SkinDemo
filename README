@@ -1,0 +1,5 @@
+
+root  = null，attachToRoot=false：返回resource 加载的view，不会挂载到root上，没有设置LayoutParams，需要代码设置
+root  = null，attachToRoot=true ：返回resource 加载的view，不会挂载到root上，没有设置LayoutParams，需要代码设置
+root != null，attachToRoot=false：返回resource 加载的view，不会挂载到root上，使用resource 根标签属性，设置LayoutParams
+root != null，attachToRoot=true ：返回root 的 view，挂载到root上，addView时设置LayoutParams。
