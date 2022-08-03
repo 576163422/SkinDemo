@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SkinDemo"
 include ':app'
+include ':skinapk'
