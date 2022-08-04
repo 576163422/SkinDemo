@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.os.Build;
 
 import com.example.skindemo.R;
+import com.example.skindemo.skin.SkinResources;
 
 
 /**
@@ -62,8 +63,7 @@ public class SkinThemeUtils {
             }
         }
         if (navigationBarColor != 0) {
-            int color = SkinResources.getInstance().getColor
-                    (navigationBarColor);
+            int color = SkinResources.getInstance().getColor(navigationBarColor);
             activity.getWindow().setNavigationBarColor(color);
 
         }

@@ -1,13 +1,17 @@
-package com.example.skindemo.manager
+package com.example.skindemo.skin
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import java.lang.Exception
 import java.lang.reflect.Constructor
-import java.util.HashMap
+import java.util.*
 
-class SkinLayoutInflaterFactory : LayoutInflater.Factory2 {
+/**
+ * 用来接管系统的view的生产过程
+ */
+class SkinLayoutInflaterFactory : LayoutInflater.Factory2, Observer {
 
     companion object {
         private val mClassPrefixList = arrayOf("android.widget.", "android.webkit.", "android.app.", "android.view.")
@@ -28,12 +32,6 @@ class SkinLayoutInflaterFactory : LayoutInflater.Factory2 {
         context: Context,
         attrs: AttributeSet
     ): View? {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        //换肤就是在需要时候替换 View的属性(src、background等) 所以这里创建 View,从而修改View属性
         var view = createSDKView(context, name, attrs)
         if (view == null) {
             view = createView(context, name, attrs);
@@ -43,6 +41,21 @@ class SkinLayoutInflaterFactory : LayoutInflater.Factory2 {
             //加载属性
             skinAttribute.look(view, attrs)
         }
+        return view
+    }
+
+
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
+//        //换肤就是替换View的属性(src、background等) 所以这里创建 View,从而修改View属性
+//        var view = createSDKView(context, name, attrs)
+//        if (view == null) {
+//            view = createView(context, name, attrs);
+//        }
+//        //插入换肤逻辑
+//        if (null != view) {
+//            //加载属性
+//            skinAttribute.look(view, attrs)
+//        }
         return null
     }
 
@@ -75,11 +88,18 @@ class SkinLayoutInflaterFactory : LayoutInflater.Factory2 {
     private fun findConstructor(context: Context, name: String): Constructor<out View?>? {
         var constructor: Constructor<out View?>? = sConstructorMap.get(name)
         if (constructor == null) {
-            val clazz: Class<out View?> =
-                Class.forName(name, false, context.classLoader).asSubclass(View::class.java)
-            constructor = clazz.getConstructor(*mConstructorSignature)
-            sConstructorMap.put(name, constructor)
+            try {
+                val clazz = context.classLoader.loadClass(name).asSubclass(View::class.java)
+                constructor = clazz.getConstructor(*mConstructorSignature)//加*号，调用可变参数方法时，把数组变为可变参数
+                sConstructorMap.put(name, constructor)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         return constructor
+    }
+
+    override fun update(o: Observable?, arg: Any?) {
+        skinAttribute.applySkin()
     }
 }

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SkinDemo</string>
+    <string name="change">换肤</string>
+    <string name="reset">重置</string>
 </resources>
