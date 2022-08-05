@@ -55,7 +55,7 @@ class SkinManager private constructor(private val mContext: Application) : Obser
 
             val packageManager = mContext.packageManager
             //用于获取 APK 安装包文件信息
-            val info : PackageInfo? = packageManager.getPackageArchiveInfo(skinPath, PackageManager.GET_ACTIVITIES)
+            val info : PackageInfo? = packageManager.getPackageArchiveInfo(skinPath, PackageManager.GET_ACTIVITIES)//之前获取不到报错，是因为skinapk 的minsdk是29，而用于测试的模拟器是android-28
             val packageName = info?.packageName
 
             val skinResource = Resources(assetManager, appSources.displayMetrics, appSources.configuration)
